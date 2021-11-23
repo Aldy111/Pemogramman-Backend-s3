@@ -15,31 +15,18 @@ class StudentController extends Controller
         return response()->json($data, 200);
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         //menerima data requst dari body
 
-        $validated = $request->validate([
+        $validatedata = $request->validate([
             "nama" => "required",
             "nim" => "required|numeric",
             "email" => "required|email",
             "jurusan" => "required"
         ]);
 
-        $student = Student::create($validated);
-
-
-
-        //jika ingin memangil tanpa membuat variable
-        // $student = Student::create(
-        //     [
-        //         //insert data ke database->Student
-        //         'nama' => $request->nama,
-        //         'nim' => $request->nim,
-        //         'email' => $request->email,
-        //         'jurusan' => $request->jurusan
-        //     ]
-        // );
+        $student = Student::create($validatedata);
 
         $data = [
             'message' => 'Student is Created Successfully',

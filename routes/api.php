@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 
 /*
@@ -48,9 +49,18 @@ Route::post('/animals', [AnimalController::class, 'store']);
 Route::put('/animals/{id}', [AnimalController::class, 'update']);
 Route::delete('/animals/{id}', [AnimalController::class, 'destroy']);
 
-# Students API
-Route::get('/students', [StudentController::class, 'index']);
-Route::post('/students', [StudentController::class, 'create']);
-Route::get('/students/{id}', [StudentController::class, 'show']);
-Route::put('/students/{id}', [StudentController::class, 'update']);
-Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    # Students API
+    Route::get('/students', [StudentController::class, 'index']);
+    Route::post('/students', [StudentController::class, 'create']);
+    Route::get('/students/{id}', [StudentController::class, 'show']);
+    Route::put('/students/{id}', [StudentController::class, 'update']);
+    Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+});
+
+
+
+#endpoint register dan login
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);

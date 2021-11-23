@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use PHPUnit\Framework\MockObject\Stub\Stub;
 
 class StudentController extends Controller
 {
@@ -19,28 +18,37 @@ class StudentController extends Controller
     public function create(Request $request)
     {
         //menerima data requst dari body
-        $nama = $request->nama;
-        $nim = $request->nim;
-        $email = $request->email;
-        $jurusan = $request->jurusan;
 
-        $student = Student::create(
-            [
-                //insert data ke database->Student
-                'nama' => $nama,
-                'nim' => $nim,
-                'email' => $email,
-                'jurusan' => $jurusan
-            ]
-        );
+        $validated = $request->validate([
+            "nama" => "required",
+            "nim" => "required|numeric",
+            "email" => "required|email",
+            "jurusan" => "required"
+        ]);
+
+        $student = Student::create($validated);
+
+
+
+        //jika ingin memangil tanpa membuat variable
+        // $student = Student::create(
+        //     [
+        //         //insert data ke database->Student
+        //         'nama' => $request->nama,
+        //         'nim' => $request->nim,
+        //         'email' => $request->email,
+        //         'jurusan' => $request->jurusan
+        //     ]
+        // );
 
         $data = [
             'message' => 'Student is Created Successfully',
             'data' => $student
         ];
-
         return response()->json($data, 201);
     }
+
+
 
     public function show($id)
     {
